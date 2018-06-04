@@ -1,7 +1,9 @@
 var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
-    path = require("path");
+    path = require("path"),
+    process_cwd = process.cwd(),
+    projectConfig = require('./project.config.js');
 
 
 var cleanWebpackPlugin = new CleanWebpackPlugin(
@@ -24,6 +26,13 @@ var config = {
         path:path.resolve(__dirname,'dist'),
         filename:"[name].js",
         publicPath:"/",
+    },
+    resolve:{
+        alias:{
+            "@page":projectConfig.page && projectConfig.page.path ? path.join(process_cwd,projectConfig.page.path) : path.join(process_cwd,"./src/page/"),
+            "@widget":projectConfig.widget && projectConfig.widget.path ? path.join(process_cwd,projectConfig.widget.path) : path.join(process_cwd,"./src/widget/"),
+            "@css":projectConfig.css && projectConfig.css.path ? path.join(process_cwd,projectConfig.css.path) : path.join(process_cwd,"./src/css/")
+        }
     },
     devtool: 'inline-source-map',
     module:{

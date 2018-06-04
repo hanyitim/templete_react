@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
-import  "../../css/base.css";
+import  "@css/base.css";
 import "./index.less";
 
+import TempWidget from "@widget/temp_widget/index.jsx";
 
 class App extends Component{
 	constructor(props) {
@@ -16,8 +17,9 @@ class App extends Component{
     
 	render(){
 		return (
-            <div className="test">
-				343412312321123123123123
+            <div className={["$pageName"].join(" ")}>
+				page templete
+				<TempWidget />
             </div>
 		)
 	}

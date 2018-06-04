@@ -1,11 +1,6 @@
 const config = {
     page:{
-        path:"./src/page",
-        pageInfo:{
-            temp_index:{
-                title:"page模板"
-            }
-        }
+        path:"./src/page"
     },
     mock:{
         path:"./mock",
@@ -14,11 +9,11 @@ const config = {
     widget:{
         page:"./src/widget"
     },
+    css:{
+        path:"./src/css"
+    },
     common:{
         vender:['react','react-dom']
-    },
-    isSPA:{
-        isuse:true
     }
 }
 

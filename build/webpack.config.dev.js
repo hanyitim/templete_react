@@ -22,8 +22,7 @@ const analyzer = new BundleAnalyzerPlugin({
 
 const process_cwd = process.cwd();
 const pageDir = path.join(process_cwd,projectConfig.page.path),
-      pageList = fs.readdirSync(pageDir),
-      pageInfo = projectConfig.page.pageInfo;
+      pageList = fs.readdirSync(pageDir);
 
 const config = {...baseConfig};
 
@@ -44,7 +43,6 @@ pageList.map((item) =>{
     //根据page目录输出对应的模板
     config.plugins.push(new HtmlWebpackPlugin({
       template:path.join(pageDir,item,"index.html"),
-      title:pageInfo[item]["title"] || "",
       chunks:[...commom,item],
       filename:`../${item}.html`
     }));

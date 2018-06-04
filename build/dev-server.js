@@ -12,13 +12,11 @@ const app = express();
 const baseConfig = require('./webpack.config.base.js');
 const projectConfig = require('./project.config.js');
 
-
 const process_cwd = process.cwd();
 const mockDir = path.join(process_cwd,projectConfig.mock.path),
     mockFileList = fs.readdirSync(mockDir),
     pageDir = path.join(process_cwd,projectConfig.page.path),
-    pageList = fs.readdirSync(pageDir),
-    pageInfo = projectConfig.page.pageInfo;
+    pageList = fs.readdirSync(pageDir);
 
 const config = {...baseConfig};
 config.plugins.push(
@@ -35,7 +33,6 @@ pageList.map((item) =>{
   //根据page目录输出对应的模板
   config.plugins.push(new HtmlWebpackPlugin({
     template:path.join(pageDir,item,"index.html"),
-    title:pageInfo[item]["title"] || "",
     chunks:[...commom,item],
     filename:`${item}.html`
   }));

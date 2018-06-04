@@ -22,7 +22,7 @@ const config = {...baseConfig};
 config.output.path = path.join(__dirname,"dist_prod/static");
 config.output.filename = "[hash].[name].js";
 config.output.publicPath = "./static/";
-// config.devtool = "";
+config.devtool = "none";
 //公共模块依赖
 let commom = Object.keys(projectConfig.common);
 commom.map((item)=>{
@@ -34,7 +34,6 @@ pageList.map((item) =>{
     //根据page目录输出对应的模板
     config.plugins.push(new HtmlWebpackPlugin({
       template:path.join(pageDir,item,"index.html"),
-      title:pageInfo[item]["title"] || "",
       chunks:[...commom,item],
       filename:`../${item}.html`
     }));
