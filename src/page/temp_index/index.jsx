@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import  "../../css/base.css";
-import style from './index.less';
+import "./index.less";
 
 
 class App extends Component{
@@ -12,11 +12,9 @@ class App extends Component{
         }
 	}
     componentDidMount(){
-        var self = this;
     }
     
 	render(){
-        var self = this;
 		return (
             <div className="test">
 				343412312321123123123123

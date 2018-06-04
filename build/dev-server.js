@@ -13,13 +13,14 @@ const baseConfig = require('./webpack.config.base.js');
 const projectConfig = require('./project.config.js');
 
 
-var process_cwd = process.cwd();
-var mockDir = path.join(process_cwd,projectConfig.mock.path),
+const process_cwd = process.cwd();
+const mockDir = path.join(process_cwd,projectConfig.mock.path),
     mockFileList = fs.readdirSync(mockDir),
     pageDir = path.join(process_cwd,projectConfig.page.path),
-    mackPageList = fs.readdirSync(pageDir);
+    pageList = fs.readdirSync(pageDir),
+    pageInfo = projectConfig.page.pageInfo;
 
-var config = {...baseConfig};
+const config = {...baseConfig};
 config.plugins.push(
   new webpack.HotModuleReplacementPlugin(),
 );
@@ -28,12 +29,13 @@ let commom = Object.keys(projectConfig.common);
 commom.map((item)=>{
   config.entry[item] = [...projectConfig.common[item]];
 })
-mackPageList.map((item) =>{
+pageList.map((item) =>{
   //根据page目录设置多页入口
   config.entry[item] = [hotMiddlewareScript,path.join(pageDir,item,"index.jsx")];
   //根据page目录输出对应的模板
   config.plugins.push(new HtmlWebpackPlugin({
     template:path.join(pageDir,item,"index.html"),
+    title:pageInfo[item]["title"] || "",
     chunks:[...commom,item],
     filename:`${item}.html`
   }));

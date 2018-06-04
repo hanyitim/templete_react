@@ -1,6 +1,11 @@
 const config = {
     page:{
-        path:"./src/page"
+        path:"./src/page",
+        pageInfo:{
+            temp_index:{
+                title:"page模板"
+            }
+        }
     },
     mock:{
         path:"./mock",

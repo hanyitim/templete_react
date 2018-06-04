@@ -3,9 +3,7 @@ var webpack = require('webpack'),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
     path = require("path");
 
-var definePlugin = new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-});
+
 var cleanWebpackPlugin = new CleanWebpackPlugin(
     ['dist','dist_prod'],{
         root:__dirname,

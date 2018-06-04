@@ -3,8 +3,18 @@
     "plugins": [
         "react"
     ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "jasmine": true
+    },
     "rules": {
-        "react/prop-types": [2]
+        "default-case":1,
+        "no-dupe-args":1,
+        "eqeqeq":1,
+        "no-eval":1,
+        "no-new-wrappers":1,
+        "comma-dangle":1
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"]
     
