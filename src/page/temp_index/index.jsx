@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import  "@css/base.css";
-import "./index.less";
+import style from "./index.less";
 
 import TempWidget from "@widget/temp_widget/index.jsx";
 
@@ -19,6 +19,7 @@ class App extends Component{
 		return (
             <div className={["$pageName"].join(" ")}>
 				page templete
+				<div className={style.image}></div>
 				<TempWidget />
             </div>
 		)

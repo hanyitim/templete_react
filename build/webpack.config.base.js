@@ -80,18 +80,33 @@ var config = {
                         loader:"style-loader"
                     },
                     {
-                        loader:"css-loader"
+                        loader:"css-loader",
+                        options:{
+                            modules:true,
+                            localIdentName:"[hash:base64:5]",
+                            sourceMap:true
+                        }
+                    },
+                    {
+                        loader:"resolve-url-loader",
+                        options:{
+                            sourceMap:true
+                        }
                     },
                     {
                         loader: 'postcss-loader', 
                         options: { 
+                            sourceMap:true,
                             config:{
                                 path:path.join(__dirname,"/postcss.config.js")
                             }
                         }
                     },
                     {
-                        loader:"less-loader"
+                        loader:"less-loader",
+                        options:{
+                            sourceMap:true
+                        }
                     }
                 ]
             },
@@ -103,11 +118,23 @@ var config = {
                         loader:"style-loader"
                     },
                     {
-                        loader:"css-loader"
+                        loader:"css-loader",
+                        options:{
+                            modules:true,
+                            localIdentName:"[hash:base64:5]",
+                            sourceMap:true
+                        }
+                    },
+                    {
+                        loader:"resolve-url-loader",
+                        options:{
+                            sourceMap:true
+                        }
                     },
                     {
                         loader: 'postcss-loader', 
                         options: { 
+                            sourceMap:true,
                             config:{
                                 path:path.join(__dirname,"/postcss.config.js")
                             }

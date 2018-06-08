@@ -11,6 +11,7 @@ const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
 const app = express();
 const baseConfig = require('./webpack.config.base.js');
 const projectConfig = require('./project.config.js');
+const reg = /^[\w\_]+$/gi;
 
 const process_cwd = process.cwd();
 const mockDir = path.join(process_cwd,projectConfig.mock.path),
@@ -28,14 +29,16 @@ commom.map((item)=>{
   config.entry[item] = [...projectConfig.common[item]];
 })
 pageList.map((item) =>{
-  //根据page目录设置多页入口
-  config.entry[item] = [hotMiddlewareScript,path.join(pageDir,item,"index.jsx")];
-  //根据page目录输出对应的模板
-  config.plugins.push(new HtmlWebpackPlugin({
-    template:path.join(pageDir,item,"index.html"),
-    chunks:[...commom,item],
-    filename:`${item}.html`
-  }));
+  if(reg.test(item)){
+    //根据page目录设置多页入口
+    config.entry[item] = [hotMiddlewareScript,path.join(pageDir,item,"index.jsx")];
+    //根据page目录输出对应的模板
+    config.plugins.push(new HtmlWebpackPlugin({
+      template:path.join(pageDir,item,"index.html"),
+      chunks:[...commom,item],
+      filename:`${item}.html`
+    }));
+  }
 })
 
 
@@ -46,12 +49,14 @@ if(projectConfig.mock.isuse){
     let itemPath = path.join(mockDir,`./${item}`),
         route = item.replace(/\-/gi,'/'),
         data = require(path.join(mockDir,`./${item}`));
-    app.use(`/${route}`,(req,res)=>{
-      res.set({
-        'Content-Type': 'application/json'
-      });
-      res.send(JSON.stringify(data));
-    })    
+    if(reg.test(route)){
+      app.use(`/${route}`,(req,res)=>{
+        res.set({
+          'Content-Type': 'application/json'
+        });
+        res.send(JSON.stringify(data));
+      }) 
+    }
   })
 }
 
