@@ -14,7 +14,8 @@
         "eqeqeq":1,
         "no-eval":1,
         "no-new-wrappers":1,
-        "comma-dangle":1
+        "comma-dangle":1,
+        "no-console":1
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"]
     

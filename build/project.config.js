@@ -12,8 +12,11 @@ const config = {
     css:{
         path:"./src/css"
     },
+    js:{
+        path:"./src/js"
+    },
     common:{
-        vender:['react','react-dom']
+        vendor:['react','react-dom']
     }
 }
 

@@ -1,11 +1,12 @@
 {
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack -wd --config ./build/webpack.config.dev.js --mode development",
-    "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.config.prod.js --mode production",
+    "dev": "cross-env NODE_ENV=dev webpack -wd --config ./build/webpack.config.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.config.prod.js",
     "start": "node ./build/dev-server.js",
     "tree": "tree -L 4 -I 'node_modules' > readme.txt",
     "analyz": "npm_config_report=true npm run build"
   },
+  "sideEffects":false,
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.3",
