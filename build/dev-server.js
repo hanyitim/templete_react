@@ -15,17 +15,10 @@ const mockDir = path.join(process_cwd,projectConfig.mock.path),
       mockFileList = fs.readdirSync(mockDir);
 
 
-// console.log(baseConfig);
-// return false;
 const config = baseConfig({
-  tempConfig:{
     isHot:true
-  },
-  config:{
-  }
 });
-// console.log(config);
-// return false;
+
 //mock
 if(projectConfig.mock.isuse){
   mockFileList.map((item) =>{

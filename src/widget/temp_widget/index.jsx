@@ -13,7 +13,7 @@ export default class Comp extends Component{
 	render(){
 		return (
 			<div className={["$widgetName"].join(" ")} >
-				widget templete 
+				widget templete 113
             </div>
 		)
 	}
