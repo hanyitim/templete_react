@@ -55,7 +55,7 @@ function getCacheGroups(){
     Object.keys(commons).forEach((item) => {
         cacheGroups[item] = {
             name:item,
-            filename:`${item}.js`,
+            // filename:`${item}.js`,
             chunks: 'initial'
         }
     });
