@@ -94,10 +94,11 @@ module.exports = function(option = {}){
         mode: option.mode || 'none',
         resolve:{
             alias:{
-                "@page":projectConfig.page && projectConfig.page.path ? absolute(projectConfig.page.path) : absolute("./src/page/"),
-                "@widget":projectConfig.widget && projectConfig.widget.path ? absolute(projectConfig.widget.path) : absolute("./src/widget/"),
-                "@css":projectConfig.css && projectConfig.css.path ? absolute(projectConfig.css.path) : absolute("./src/css/"),
-                "@js":projectConfig.js && projectConfig.js.path ? absolute(projectConfig.js.path) : absolute("./src/js/")
+                "@page":absolute("./src/page/"),
+                "@widget":absolute("./src/widget/"),
+                "@css":absolute("./src/css/"),
+                "@js":absolute("./src/js/"),
+                "@mobx":absolute("./src/mobx/")
             },
             modules:[absolute('./node_modules')]
         },
@@ -119,9 +120,6 @@ module.exports = function(option = {}){
                             options:{
                                 cacheDirectory:true
                             }
-                        },
-                        {
-                            loader:"eslint-loader"
                         }
                     ]
                 },
@@ -151,7 +149,7 @@ module.exports = function(option = {}){
                 },
                 {
                     test:/\.less$/,
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /(node_modules|bower_components|\.normal.less)/,
                     include:absolute("./src"),
                     use:[
                         {
@@ -189,7 +187,7 @@ module.exports = function(option = {}){
                     ]
                 },
                 {
-                    test:/\.css$/,
+                    test:/\.normal\.less$/,
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
@@ -198,24 +196,26 @@ module.exports = function(option = {}){
                         },
                         {
                             loader:"css-loader",
-                            options:{
-                                modules:true,
-                                localIdentName:"[hash:base64:5]",
-                                sourceMap:true
-                            }
                         },
                         {
-                            loader:"resolve-url-loader",
-                            options:{
-                                sourceMap:true
-                            }
+                            loader:"less-loader"
+                        }
+                    ]
+                },
+                {
+                    test:/\.css$/,
+                    use:[
+                        {
+                            loader:"style-loader"
+                        },
+                        {
+                            loader:"css-loader"
                         },
                         {
                             loader: 'postcss-loader', 
                             options: { 
-                                sourceMap:true,
                                 config:{
-                                    path:resolve("/postcss.config.js")
+                                    path:path.join(__dirname,"/postcss.config.js")
                                 }
                             }
                         }
@@ -224,7 +224,6 @@ module.exports = function(option = {}){
                 {
                     test:/\.(jpg|png|gif)$/,
                     exclude: /(node_modules|bower_components)/,
-                    include:absolute("./src"),
                     use:{
                         loader:"url-loader",
                         options:{
@@ -234,13 +233,11 @@ module.exports = function(option = {}){
                 },
                 {
                     test: /\.(swf|woff|woff2|eot|ttf|svg)$/,
-                    include:absolute("./src"),
                     use:"file-loader"
                 }
             ]
         },
         plugins:[
-            analyzer,
             ...getPlugins(option.isHot,option.filenameFormat)
         ],
         optimization: {
@@ -249,6 +246,9 @@ module.exports = function(option = {}){
             }
         },
         cache:true
+    }
+    if(option.useAnalyzer){
+        config.plugins.push(analyzer);
     }
     return config;
 }

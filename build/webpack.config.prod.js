@@ -25,13 +25,13 @@ const config = baseConfig({
   output:{
     path:path.join(__dirname,'dist_prod/static'),
     publicPath:"./static/",
-    fielname:"[name]_[hash:5].js"
+    filename:"[name]_[hash:5].js"
   },
   filenameFormat:"../$name.html",
   mode:"production",
-  devtool:"none"
+  devtool:"source-map",
+  useAnalyzer:true
 });
-
 //prod  压缩
 config.plugins.push(uglifyPlugin,cleanWebpackPlugin,definePlugin);
 

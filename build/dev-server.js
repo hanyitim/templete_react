@@ -18,14 +18,14 @@ const mockDir = path.join(process_cwd,projectConfig.mock.path),
 const config = baseConfig({
     isHot:true
 });
-
 //mock
 if(projectConfig.mock.isuse){
   mockFileList.map((item) =>{
-    if(/^[\w\_]+$/gi.test(item)){
+    if(/^[a-zA-Z-_]+\.js$/gi.test(item)){
       item = item.replace(/\.\w*?$/gi,'');
       let route = item.replace(/\-/gi,'/'),
           data = require(path.join(mockDir,`./${item}`));
+      console.log(`/${route}`);
       app.use(`/${route}`,(req,res)=>{
         res.set({
           'Content-Type': 'application/json'
@@ -35,6 +35,7 @@ if(projectConfig.mock.isuse){
     }
   })
 }
+
 
 
 const compiler = webpack(config);
