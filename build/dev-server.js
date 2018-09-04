@@ -21,16 +21,16 @@ const config = baseConfig({
 //mock
 if(projectConfig.mock.isuse){
   mockFileList.map((item) =>{
-    if(/^[a-zA-Z-_]+\.js$/gi.test(item)){
+    if(/^[a-zA-Z-_]+\.json$/gi.test(item)){
       item = item.replace(/\.\w*?$/gi,'');
-      let route = item.replace(/\-/gi,'/'),
-          data = require(path.join(mockDir,`./${item}`));
-      console.log(`/${route}`);
+      let route = item.replace(/\-/gi,'/');
+          
       app.use(`/${route}`,(req,res)=>{
+        let data = fs.readFileSync(path.join(mockDir,`./${item}.json`),'utf8');
         res.set({
           'Content-Type': 'application/json'
         });
-        res.send(JSON.stringify(data));
+        res.send(data);
       })
     }
   })

@@ -9,7 +9,8 @@ const webpack = require('webpack'),
     pageDir = path.join(process_cwd,projectConfig.page.path),
     pageList = fs.readdirSync(pageDir),
     commons = projectConfig.common,
-    commomsKey = Object.keys(commons);
+    commomsKey = Object.keys(commons),
+    MinicssExtractPlugin = require('mini-css-extract-plugin');
 
 
 
@@ -61,7 +62,7 @@ function getCacheGroups(){
     });
     return cacheGroups;
 }
-function getPlugins(isHot = false,filenameFormat = false){
+function getPlugins(isHot = false,filenameFormat = false,isPro = false){
     var plugins = [];
     if(isHot){
         plugins.push(new webpack.HotModuleReplacementPlugin())
@@ -76,6 +77,12 @@ function getPlugins(isHot = false,filenameFormat = false){
             }));
         }
     });
+    if(isPro){
+        plugins.push(new MinicssExtractPlugin({
+            filename:'[name].[hash].css',
+            chunkFilename:'[id].[hash].css'
+        }))
+    }
     return plugins;
 }
 function getOutput(option = {}){
@@ -128,7 +135,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        {
+                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -152,7 +159,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components|\.normal.less)/,
                     include:absolute("./src"),
                     use:[
-                        {
+                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -191,7 +198,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        {
+                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -205,7 +212,7 @@ module.exports = function(option = {}){
                 {
                     test:/\.css$/,
                     use:[
-                        {
+                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -238,7 +245,7 @@ module.exports = function(option = {}){
             ]
         },
         plugins:[
-            ...getPlugins(option.isHot,option.filenameFormat)
+            ...getPlugins(option.isHot,option.filenameFormat,option.isPro)
         ],
         optimization: {
             splitChunks: {

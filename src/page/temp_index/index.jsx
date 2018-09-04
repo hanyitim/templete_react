@@ -7,6 +7,8 @@ import style from "./index.less";
 import TempWidget from "@widget/temp_widget/index.jsx";
 import {testA} from '@js/test.js';
 
+import request from 'reqwest';
+
 console.log(testA());
 class App extends Component{
 	constructor(props) {
@@ -15,6 +17,14 @@ class App extends Component{
         }
 	}
     componentDidMount(){
+		request({
+			url:`/temp/mock`,
+			data:{},
+			method:'get'
+		})
+		.then(res=>{
+			console.log(res);
+		})
     }
     
 	render(){
