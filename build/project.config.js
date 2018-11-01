@@ -17,7 +17,12 @@ const config = {
     },
     common:{
         vendor:['react','react-dom']
-    }
+    },
+    cdnUrls:[
+        "https://redenvelopepre.lizhi.fm/static/chai_hong_bao.html",
+        "https://redenvelopepre.lizhi.fm/static/chai_hong_bao.html",
+        "https://redenvelopepre.lizhi.fm/static/count_down.html"
+    ]
 }
 
 module.exports = config;

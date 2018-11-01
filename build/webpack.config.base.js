@@ -10,7 +10,8 @@ const webpack = require('webpack'),
     pageList = fs.readdirSync(pageDir),
     commons = projectConfig.common,
     commomsKey = Object.keys(commons),
-    MinicssExtractPlugin = require('mini-css-extract-plugin');
+    MinicssExtractPlugin = require('mini-css-extract-plugin'),
+    tinyPngWebpackPlugin = require('tinypng-webpack-plugin');
 
 
 
@@ -33,7 +34,11 @@ const analyzer = new BundleAnalyzerPlugin({
       statsOptions: null,
       logLevel: 'info'
 });
-
+//tinypny 图片压缩
+const tinypng = new tinyPngWebpackPlugin({
+    key:"C0Oz0wnS8oIaigNQW6g1Tq6T9jyOkTEQ",  //free key， 500/month
+    ext:['png','jpeg','jpg']
+})
 function getEntry(isHot=false){
     var entry = {};
     //common entry
@@ -256,6 +261,9 @@ module.exports = function(option = {}){
     }
     if(option.useAnalyzer){
         config.plugins.push(analyzer);
+    }
+    if(option.useTinypng){
+        config.plugins.push(tinypng);
     }
     return config;
 }

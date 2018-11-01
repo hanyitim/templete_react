@@ -4,6 +4,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require("path");
 const fs = require("fs");
+const inquirer = require('inquirer');
 
 
 const app = express();
@@ -21,7 +22,7 @@ const config = baseConfig({
 //mock
 if(projectConfig.mock.isuse){
   mockFileList.map((item) =>{
-    if(/^[a-zA-Z-_]+\.json$/gi.test(item)){
+    if(/^[a-zA-Z][\w-]+\.json$/gi.test(item)){
       item = item.replace(/\.\w*?$/gi,'');
       let route = item.replace(/\-/gi,'/');
           
@@ -36,23 +37,43 @@ if(projectConfig.mock.isuse){
   })
 }
 
+//监听端口
+function listen(port){
+  app.listen(port,()=>{
+    console.log(`Example app listening on port ${port}!\n`);
+    toBuild();
+  })
+  .on('error',(err)=>{
+    inquirer.prompt([
+      {
+        type:'confirm',
+        name:'port',
+        message:`:${port} used,listen port ${port+1} ?`
+      }
+    ])
+    .then((answers) => {
+      if(answers.port){
+        listen(port+1)
+      }
+    })
+  })
+}
+//开始构建
+function toBuild(){
+  const compiler = webpack(config);
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath
+  }));
+  app.use(webpackHotMiddleware(compiler, {
+      noInfo: true, 
+      publicPath: config.output.publicPath,
+      stats: {colors: true},
+      lazy: false,
+      watchOptions: {
+          aggregateTimeout: 300,
+          poll: true
+      }
+  }));
+}
 
-
-const compiler = webpack(config);
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: config.output.publicPath
-}));
-app.use(webpackHotMiddleware(compiler, {
-    noInfo: true, 
-    publicPath: config.output.publicPath,
-    stats: {colors: true},
-    lazy: false,
-    watchOptions: {
-        aggregateTimeout: 300,
-        poll: true
-    }
-}));
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!\n');
-});
+listen(3000);

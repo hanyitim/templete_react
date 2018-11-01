@@ -23,14 +23,15 @@ const uglifyPlugin = new UglifyJsPlugin();
 
 const config = baseConfig({
   output:{
-    path:path.join(__dirname,'dist_prod/static'),
+    path:path.join(__dirname,'dist/static'),
     publicPath:"./static/",
     filename:"[name]_[hash:5].js"
   },
   filenameFormat:"../$name.html",
   mode:"production",
   devtool:"source-map",
-  useAnalyzer:true
+  useAnalyzer:false,
+  useTinypng:false
 });
 //prod  压缩
 config.plugins.push(uglifyPlugin,cleanWebpackPlugin,definePlugin);
