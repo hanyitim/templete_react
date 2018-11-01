@@ -9,7 +9,7 @@ axios({
     data:qs.stringify({
         qq:"00",
         ws:"01",
-        SecretKey:"YWRtaW5zdHJhdG9yCg",
+        SecretKey:"*****",
         flushurl:`${projectConfig.cdnUrls.join(";")}`
     })
 })
