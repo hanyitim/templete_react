@@ -36,7 +36,7 @@ const analyzer = new BundleAnalyzerPlugin({
 });
 //tinypny 图片压缩
 const tinypng = new tinyPngWebpackPlugin({
-    key:"C0Oz0wnS8oIaigNQW6g1Tq6T9jyOkTEQ",  //free key， 500/month
+    key:projectConfig.tinypngKeys,  
     ext:['png','jpeg','jpg']
 })
 function getEntry(isHot=false){
@@ -61,7 +61,7 @@ function getCacheGroups(){
     Object.keys(commons).forEach((item) => {
         cacheGroups[item] = {
             name:item,
-            // filename:`${item}.js`,
+            filename:`${item}.js`,
             chunks: 'initial'
         }
     });
@@ -254,7 +254,7 @@ module.exports = function(option = {}){
         ],
         optimization: {
             splitChunks: {
-                cacheGroups: getCacheGroups()
+                splitChunks: getCacheGroups()
             }
         },
         cache:true

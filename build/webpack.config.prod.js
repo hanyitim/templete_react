@@ -31,7 +31,8 @@ const config = baseConfig({
   mode:"production",
   devtool:"source-map",
   useAnalyzer:false,
-  useTinypng:false
+  useTinypng:true,
+  isPro:true
 });
 //prod  压缩
 config.plugins.push(uglifyPlugin,cleanWebpackPlugin,definePlugin);
