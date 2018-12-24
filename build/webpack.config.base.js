@@ -254,7 +254,7 @@ module.exports = function(option = {}){
         ],
         optimization: {
             splitChunks: {
-                splitChunks: getCacheGroups()
+                cacheGroups: getCacheGroups()
             }
         },
         cache:true
