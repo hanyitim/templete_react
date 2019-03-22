@@ -1,4 +1,7 @@
 const config = {
+    src:{
+        path:"./src"
+    },
     page:{
         path:"./src/page"
     },
@@ -24,7 +27,8 @@ const config = {
         "https://redenvelopepre.lizhi.fm/static/count_down.html"
     ],
     //free key， 500/month
-    tinypngKeys:["C0Oz0wnS8oIaigNQW6g1Tq6T9jyOkTEQ"]
+    tinypngKeys:["C0Oz0wnS8oIaigNQW6g1Tq6T9jyOkTEQ"],
+    isSPA:true
 }
 
 module.exports = config;

@@ -9,10 +9,10 @@ const webpack = require('webpack'),
     pageDir = path.join(process_cwd,projectConfig.page.path),
     pageList = fs.readdirSync(pageDir),
     commons = projectConfig.common,
+    isSPA = projectConfig.isSPA,
     commomsKey = Object.keys(commons),
     MinicssExtractPlugin = require('mini-css-extract-plugin'),
     tinyPngWebpackPlugin = require('tinypng-webpack-plugin');
-
 
 
 function absolute(dir){
@@ -39,20 +39,28 @@ const tinypng = new tinyPngWebpackPlugin({
     key:projectConfig.tinypngKeys,  
     ext:['png','jpeg','jpg']
 })
+
+//获取入口
 function getEntry(isHot=false){
     var entry = {};
     //common entry
     Object.keys(commons).forEach((item) => {
         entry[item] = commons[item];
     });
-    //page entry
-    pageList.forEach((item) =>{
-        if(/^[\w\_]+$/gi.test(item)){
-            //根据page目录设置多页入口
-            entry[item] = [path.join(pageDir,item,"index.jsx")];
-            isHot && entry[item].unshift(hotMiddlewareScript);
-        }
-    })
+    if(isSPA){
+         //main entry
+        entry["main"] = [path.join(pageDir,"main.jsx")];
+        isHot && entry["main"].unshift(hotMiddlewareScript);
+    }else{
+        //page entry
+        pageList.forEach((item) =>{
+            if(/^[\w\_]+$/gi.test(item)){
+                //根据page目录设置多页入口
+                entry[item] = [path.join(pageDir,item,"index.jsx")];
+                isHot && entry[item].unshift(hotMiddlewareScript);
+            }
+        })
+    }
     return entry;
 }
 function getCacheGroups(){
@@ -67,21 +75,34 @@ function getCacheGroups(){
     });
     return cacheGroups;
 }
+function getHtmlPlugins(filenameFormat = false){
+    let plugins = [];
+    if(isSPA){
+        plugins.push(new HtmlWebpackPlugin({
+            template:path.join(pageDir,"page.html"),
+            chunks:[...commomsKey,"main"],
+            filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,"page")}` : `page.html`
+        }));
+    }else{
+        pageList.forEach((item) =>{
+            if(/^[\w\-]+$/gi.test(item)){
+                //根据page目录输出对应的模板
+                plugins.push(new HtmlWebpackPlugin({
+                    template:path.join(pageDir,item,"index.html"),
+                    chunks:[...commomsKey,item],
+                    filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,item)}` : `${item}.html`
+                }));
+            }
+        });
+    }
+    return plugins;
+}
 function getPlugins(isHot = false,filenameFormat = false,isPro = false){
     var plugins = [];
     if(isHot){
         plugins.push(new webpack.HotModuleReplacementPlugin())
     }
-    pageList.forEach((item) =>{
-        if(/^[\w\_]+$/gi.test(item)){
-            //根据page目录输出对应的模板
-            plugins.push(new HtmlWebpackPlugin({
-                template:path.join(pageDir,item,"index.html"),
-                chunks:[...commomsKey,item],
-                filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,item)}` : `${item}.html`
-            }));
-        }
-    });
+    plugins = plugins.concat(getHtmlPlugins(filenameFormat));
     if(isPro){
         plugins.push(new MinicssExtractPlugin({
             filename:'[name].[hash].css',
@@ -99,22 +120,33 @@ function getOutput(option = {}){
     return Object.assign(defaultOpt,option);
 }
 module.exports = function(option = {}){
-   
+    var {
+        isHot,
+        isPro,
+        filenameFormat,
+        useAnalyzer,
+        useTinypng,
+        output,
+        mode,
+        devtool
+    } = option;
+
     var config = {
-        entry:getEntry(option.isHot) || {},
-        output:getOutput(option.output),
-        mode: option.mode || 'none',
+        entry:getEntry(isHot) || {},
+        output:getOutput(output),
+        mode: mode || 'none',
         resolve:{
             alias:{
                 "@page":absolute("./src/page/"),
                 "@widget":absolute("./src/widget/"),
                 "@css":absolute("./src/css/"),
                 "@js":absolute("./src/js/"),
-                "@mobx":absolute("./src/mobx/")
+                "@mobx":absolute("./src/mobx/"),
+                "@src":absolute("./src/")
             },
             modules:[absolute('./node_modules')]
         },
-        devtool: option.devtool || 'inline-source-map',
+        devtool: devtool || 'inline-source-map',
         watchOptions:{
             aggregateTimeout: 300,
             poll: 1000,
@@ -140,7 +172,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -164,7 +196,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components|\.normal.less)/,
                     include:absolute("./src"),
                     use:[
-                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -203,7 +235,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -217,7 +249,7 @@ module.exports = function(option = {}){
                 {
                     test:/\.css$/,
                     use:[
-                        option.isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader}:{
                             loader:"style-loader"
                         },
                         {
@@ -250,7 +282,7 @@ module.exports = function(option = {}){
             ]
         },
         plugins:[
-            ...getPlugins(option.isHot,option.filenameFormat,option.isPro)
+            ...getPlugins(isHot,filenameFormat,isPro)
         ],
         optimization: {
             splitChunks: {
@@ -259,10 +291,10 @@ module.exports = function(option = {}){
         },
         cache:true
     }
-    if(option.useAnalyzer){
+    if(useAnalyzer){
         config.plugins.push(analyzer);
     }
-    if(option.useTinypng){
+    if(useTinypng){
         config.plugins.push(tinypng);
     }
     return config;
