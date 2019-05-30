@@ -94,7 +94,8 @@ function getHtmlPlugins(filenameFormat = false){
                 //根据page目录输出对应的模板
                 plugins.push(new HtmlWebpackPlugin({
                     template:path.join(pageDir,item,"index.html"),
-                    chunks:[...commomsKey,item],
+                    // chunks:[...commomsKey,item],
+                    chunks:["vendor",item],
                     filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,item)}` : `${item}.html`
                 }));
             }
@@ -110,8 +111,8 @@ function getPlugins(isHot = false,filenameFormat = false,isPro = false){
     plugins = plugins.concat(getHtmlPlugins(filenameFormat));
     if(isPro){
         plugins.push(new MinicssExtractPlugin({
-            filename:'[name].[hash].css',
-            chunkFilename:'[id].[hash].css'
+            filename:'[name].[contenthash].css',
+            chunkFilename:'[id].[contenthash].css'
         }))
     }
     return plugins;
