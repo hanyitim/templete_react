@@ -18,9 +18,9 @@ const config = {
     js:{
         path:"./src/js"
     },
-    common:{
-        vendor:['react','react-dom']
-    },
+    // common:{
+    //     vendor:['react','react-dom']
+    // },
     cdnUrls:[
         "https://redenvelopepre.lizhi.fm/static/chai_hong_bao.html",
         "https://redenvelopepre.lizhi.fm/static/chai_hong_bao.html",

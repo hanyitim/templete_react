@@ -8,9 +8,9 @@ const webpack = require('webpack'),
     hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true',
     pageDir = path.join(process_cwd,projectConfig.page.path),
     pageList = fs.readdirSync(pageDir),
-    commons = projectConfig.common,
+    // commons = projectConfig.common,
     isSPA = projectConfig.isSPA,
-    commomsKey = Object.keys(commons),
+    // commomsKey = Object.keys(commons),
     MinicssExtractPlugin = require('mini-css-extract-plugin'),
     tinyPngWebpackPlugin = require('tinypng-webpack-plugin');
 
@@ -44,9 +44,9 @@ const tinypng = new tinyPngWebpackPlugin({
 function getEntry(isHot=false){
     var entry = {};
     //common entry
-    Object.keys(commons).forEach((item) => {
-        entry[item] = commons[item];
-    });
+    // Object.keys(commons).forEach((item) => {
+    //     entry[item] = commons[item];
+    // });
     if(isSPA){
          //main entry
         entry["main"] = [path.join(pageDir,"main.jsx")];
@@ -66,13 +66,18 @@ function getEntry(isHot=false){
 function getCacheGroups(){
     //CacheGroups
     var cacheGroups = {};
-    Object.keys(commons).forEach((item) => {
-        cacheGroups[item] = {
-            name:item,
-            filename:`${item}.js`,
-            chunks: 'initial'
-        }
-    });
+    // Object.keys(commons).forEach((item) => {
+    //     cacheGroups[item] = {
+    //         name:item,
+    //         filename:`${item}.js`,
+    //         chunks: 'initial'
+    //     }
+    // });
+    cacheGroups.vendor = {
+        test: /[\\/]node_modules[\\/]/,
+        name:'vendor',
+        chunks:'all'
+    }
     return cacheGroups;
 }
 function getHtmlPlugins(filenameFormat = false){
@@ -172,7 +177,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
                             loader:"style-loader"
                         },
                         {
@@ -196,7 +201,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components|\.normal.less)/,
                     include:absolute("./src"),
                     use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
                             loader:"style-loader"
                         },
                         {
@@ -235,7 +240,7 @@ module.exports = function(option = {}){
                     exclude: /(node_modules|bower_components)/,
                     include:absolute("./src"),
                     use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
                             loader:"style-loader"
                         },
                         {
@@ -249,7 +254,7 @@ module.exports = function(option = {}){
                 {
                     test:/\.css$/,
                     use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader}:{
+                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
                             loader:"style-loader"
                         },
                         {

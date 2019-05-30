@@ -22,7 +22,7 @@
 3. 每次修改mock的数据后，都得重新跑一下 npm run start,因为mock的数据在启动本地服务监听mock接口的时候，执行了一次获取，后面mock的数据变动的时候，并不会去重新获取。
 
 #### 关于build/project.config.js
-1. common[Object]，这个是所有page页会自动引入的一个资源，手动抽取公共资源，然后会放到optimization.splitChunks.cacheGroups里面
+<!-- 1. common[Object]，这个是所有page页会自动引入的一个资源，手动抽取公共资源，然后会放到optimization.splitChunks.cacheGroups里面 -->
 2. page[Object]
     * path:page的目录
 3. widget[Object]
