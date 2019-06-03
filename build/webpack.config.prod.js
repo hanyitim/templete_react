@@ -14,7 +14,7 @@ const cleanWebpackPlugin = new CleanWebpackPlugin(
 
 
 const definePlugin = new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify("production")
+    'process.env.NODE_ENV': JSON.stringify("production"),
 });
 const uglifyPlugin = new UglifyJsPlugin();
 const HashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()

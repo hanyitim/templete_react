@@ -28,7 +28,7 @@ const config = {
     ],
     //free key， 500/month
     tinypngKeys:["C0Oz0wnS8oIaigNQW6g1Tq6T9jyOkTEQ"],
-    isSPA:true
+    isSPA:false
 }
 
 module.exports = config;

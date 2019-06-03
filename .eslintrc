@@ -6,17 +6,25 @@
     "env": {
         "browser": true,
         "node": true,
-        "jasmine": true
+        "jasmine": true,
+        "es6":true
     },
     "rules": {
-        "default-case":1,
-        "no-dupe-args":1,
-        "eqeqeq":1,
-        "no-eval":1,
-        "no-new-wrappers":1,
-        "comma-dangle":1,
-        "no-console":1
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": 0,
+        "template-curly-spacing" : "off",
+        "indent" : "off"
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"]
-    
 }

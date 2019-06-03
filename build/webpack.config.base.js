@@ -85,7 +85,8 @@ function getHtmlPlugins(filenameFormat = false){
     if(isSPA){
         plugins.push(new HtmlWebpackPlugin({
             template:path.join(pageDir,"page.html"),
-            chunks:[...commomsKey,"main"],
+            // chunks:[...commomsKey,"main"],
+            chunks:["vendor","main"],
             filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,"page")}` : `page.html`
         }));
     }else{
@@ -169,6 +170,18 @@ module.exports = function(option = {}){
                             loader:"babel-loader",
                             options:{
                                 cacheDirectory:true
+                            }
+                        },
+                        {
+                            loader:"eslint-loader",
+                            options:{
+                                fix:true
+                            }
+                        },
+                        {
+                            loader:'webpack-remove-block-loader',
+                            options:{
+                                active:isPro
                             }
                         }
                     ]

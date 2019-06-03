@@ -16,9 +16,13 @@ const mockDir = path.join(process_cwd,projectConfig.mock.path),
       mockFileList = fs.readdirSync(mockDir);
 
 
+const definePlugin = new webpack.DefinePlugin({
+    MOCK:JSON.stringify('1')
+});
 const config = baseConfig({
     isHot:true
 });
+config.plugins.push(definePlugin);
 //mock
 if(projectConfig.mock.isuse){
   mockFileList.map((item) =>{

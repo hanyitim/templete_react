@@ -14,7 +14,6 @@ var cleanWebpackPlugin = new CleanWebpackPlugin(
         dry:false
     }
 );
-
 const config = baseConfig({
   output:{
     path:resolve('dist/static'),
