@@ -5,7 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const cleanWebpackPlugin = new CleanWebpackPlugin(
-  ['dist_prod'],{
+  ['dist'],{
       root:__dirname,
       verbose:  true,
       dry:false
@@ -33,7 +33,8 @@ const config = baseConfig({
   devtool:"source-map",
   useAnalyzer:false,
   useTinypng:true,
-  isPro:true
+  isPro:true,
+  usePwa:true
 });
 //prod  压缩
 config.plugins.push(uglifyPlugin,cleanWebpackPlugin,definePlugin,HashedModuleIdsPlugin);

@@ -12,7 +12,8 @@ const webpack = require('webpack'),
     isSPA = projectConfig.isSPA,
     // commomsKey = Object.keys(commons),
     MinicssExtractPlugin = require('mini-css-extract-plugin'),
-    tinyPngWebpackPlugin = require('tinypng-webpack-plugin');
+    tinyPngWebpackPlugin = require('tinypng-webpack-plugin'),
+    WorkboxPlugin = require('workbox-webpack-plugin');
 
 
 function absolute(dir){
@@ -135,7 +136,8 @@ module.exports = function(option = {}){
         useTinypng,
         output,
         mode,
-        devtool
+        devtool,
+        usePwa
     } = option;
 
     var config = {
@@ -315,6 +317,13 @@ module.exports = function(option = {}){
     }
     if(useTinypng){
         config.plugins.push(tinypng);
+    }
+    if(usePwa){
+        config.plugins.push(new WorkboxPlugin.GenerateSW({
+            clientsClaim:true,
+            skipWaiting:true,
+            swDest:"../service-worker.js"
+        }))
     }
     return config;
 }

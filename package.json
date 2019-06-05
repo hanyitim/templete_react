@@ -48,7 +48,8 @@
     "webpack-dev-server": "^3.1.3",
     "webpack-hot-middleware": "^2.22.1",
     "webpack-merge": "^4.1.2",
-    "webpack-px-to-rem": "^0.1.1"
+    "webpack-px-to-rem": "^0.1.1",
+    "workbox-webpack-plugin": "^4.3.1"
   },
   "dependencies": {
     "alloylever": "^1.0.3",
