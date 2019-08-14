@@ -1,12 +1,7 @@
 import Axios from 'axios';
 import qs from 'qs';
-/* devblock:start */
-import MockAdapter from 'axios-mock-adapter';
-import {mockAdapter} from './mockAdapter.js';
 
-var mock = new MockAdapter(Axios,{ delayResponse: 2000 });
-    mockAdapter(mock);
-/* devblock:end */
+Axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
 const HOST = '';
 /**
  * request 工厂
@@ -14,7 +9,7 @@ const HOST = '';
  * @return function(data) 
  */
 function requireFactory(requireOption){
-    return (data) =>{
+    return (data,subUrl) =>{
         // console.log(opt,requireOption);
         switch(requireOption.method){
         case 'get':
@@ -26,6 +21,9 @@ function requireFactory(requireOption){
         default:
             requireOption.params = data;
             break;
+        }
+        if(subUrl){
+            requireOption.url = requireOption.url.replace('$path',subUrl);
         }
         // console.log(requireOption);
         return Axios({
@@ -43,8 +41,5 @@ function requireFactory(requireOption){
  */
 export const apiTest = requireFactory({
     url:`${HOST}/test`,
-    method:'get',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    method:'get'
 });

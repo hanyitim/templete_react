@@ -30,7 +30,7 @@ class App extends Component {
 	}
 	render() {
 		return (
-			<div className={['$pageName'].join(' ')}>
+			<div className={style.page}>
 				page templete  11
 				<div className={style.image}></div>
 				<TempWidget />

@@ -1,159 +1,30 @@
-const webpack = require('webpack'),
-    path = require("path"),
-    fs = require("fs"),
-    process_cwd = process.cwd(),
-    projectConfig = require('./project.config.js'),
-    BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true',
-    pageDir = path.join(process_cwd,projectConfig.page.path),
-    pageList = fs.readdirSync(pageDir),
-    // commons = projectConfig.common,
-    isSPA = projectConfig.isSPA,
-    // commomsKey = Object.keys(commons),
-    MinicssExtractPlugin = require('mini-css-extract-plugin'),
-    tinyPngWebpackPlugin = require('tinypng-webpack-plugin'),
-    WorkboxPlugin = require('workbox-webpack-plugin');
+const  configUtil = require('./configUtil.js'),
+       speedMeasurePlguin = require("speed-measure-webpack-plugin"),
+       smp = new speedMeasurePlguin();
 
-
-function absolute(dir){
-    return path.join(process_cwd,dir);
-}
-function resolve(dir){
-    return path.join(__dirname,dir);
-}
-//分析文件体积，直接push 到 plugins 里面去
-const analyzer = new BundleAnalyzerPlugin({
-    analyzerMode: 'server',
-      analyzerHost: 'localhost',
-      analyzerPort: 8889,
-      reportFilename: 'report.html',
-      defaultSizes: 'parsed',
-      openAnalyzer: false,
-      generateStatsFile: false,
-      statsFilename: 'stats.json',
-      statsOptions: null,
-      logLevel: 'info'
-});
-//tinypny 图片压缩
-const tinypng = new tinyPngWebpackPlugin({
-    key:projectConfig.tinypngKeys,  
-    ext:['png','jpeg','jpg']
-})
-
-//获取入口
-function getEntry(isHot=false){
-    var entry = {};
-    //common entry
-    // Object.keys(commons).forEach((item) => {
-    //     entry[item] = commons[item];
-    // });
-    if(isSPA){
-         //main entry
-        entry["main"] = [path.join(pageDir,"main.jsx")];
-        isHot && entry["main"].unshift(hotMiddlewareScript);
-    }else{
-        //page entry
-        pageList.forEach((item) =>{
-            if(/^[\w\_]+$/gi.test(item)){
-                //根据page目录设置多页入口
-                entry[item] = [path.join(pageDir,item,"index.jsx")];
-                isHot && entry[item].unshift(hotMiddlewareScript);
-            }
-        })
-    }
-    return entry;
-}
-function getCacheGroups(){
-    //CacheGroups
-    var cacheGroups = {};
-    // Object.keys(commons).forEach((item) => {
-    //     cacheGroups[item] = {
-    //         name:item,
-    //         filename:`${item}.js`,
-    //         chunks: 'initial'
-    //     }
-    // });
-    cacheGroups.vendor = {
-        test: /[\\/]node_modules[\\/]/,
-        name:'vendor',
-        chunks:'all'
-    }
-    return cacheGroups;
-}
-function getHtmlPlugins(filenameFormat = false){
-    let plugins = [];
-    if(isSPA){
-        plugins.push(new HtmlWebpackPlugin({
-            template:path.join(pageDir,"page.html"),
-            // chunks:[...commomsKey,"main"],
-            chunks:["vendor","main"],
-            filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,"page")}` : `page.html`
-        }));
-    }else{
-        pageList.forEach((item) =>{
-            if(/^[\w\-]+$/gi.test(item)){
-                //根据page目录输出对应的模板
-                plugins.push(new HtmlWebpackPlugin({
-                    template:path.join(pageDir,item,"index.html"),
-                    // chunks:[...commomsKey,item],
-                    chunks:["vendor",item],
-                    filename: filenameFormat ? `${filenameFormat.replace(/\$name/gi,item)}` : `${item}.html`
-                }));
-            }
-        });
-    }
-    return plugins;
-}
-function getPlugins(isHot = false,filenameFormat = false,isPro = false){
-    var plugins = [];
-    if(isHot){
-        plugins.push(new webpack.HotModuleReplacementPlugin())
-    }
-    plugins = plugins.concat(getHtmlPlugins(filenameFormat));
-    if(isPro){
-        plugins.push(new MinicssExtractPlugin({
-            filename:'[name].[contenthash].css',
-            chunkFilename:'[id].[contenthash].css'
-        }))
-    }
-    return plugins;
-}
-function getOutput(option = {}){
-    var defaultOpt = {
-        path:resolve("dist"),
-        filename:"[name].js",
-        publicPath:"/",
-    };
-    return Object.assign(defaultOpt,option);
-}
 module.exports = function(option = {}){
     var {
         isHot,
         isPro,
-        filenameFormat,
-        useAnalyzer,
-        useTinypng,
         output,
         mode,
-        devtool,
-        usePwa
+        devtool
     } = option;
 
     var config = {
-        entry:getEntry(isHot) || {},
-        output:getOutput(output),
+        entry:configUtil.getEntry(isHot) || {},
+        output:configUtil.getOutput(output),
         mode: mode || 'none',
         resolve:{
             alias:{
-                "@page":absolute("./src/page/"),
-                "@widget":absolute("./src/widget/"),
-                "@css":absolute("./src/css/"),
-                "@js":absolute("./src/js/"),
-                "@mobx":absolute("./src/mobx/"),
-                "@src":absolute("./src/")
+                "@page":configUtil.pathPwd("./src/page/"),
+                "@widget":configUtil.pathPwd("./src/widget/"),
+                "@css":configUtil.pathPwd("./src/css/"),
+                "@js":configUtil.pathPwd("./src/js/"),
+                "@mobx":configUtil.pathPwd("./src/mobx/"),
+                "@src":configUtil.pathPwd("./src/")
             },
-            modules:[absolute('./node_modules')]
+            modules:[configUtil.pathPwd('./node_modules')]
         },
         devtool: devtool || 'inline-source-map',
         watchOptions:{
@@ -166,125 +37,24 @@ module.exports = function(option = {}){
                 {
                     test:/\.(jsx|js)$/,
                     exclude: /(node_modules|bower_components)/,
-                    include:absolute("./src"),
-                    use:[
-                        {
-                            loader:"babel-loader",
-                            options:{
-                                cacheDirectory:true
-                            }
-                        },
-                        {
-                            loader:"eslint-loader",
-                            options:{
-                                fix:true
-                            }
-                        },
-                        {
-                            loader:'webpack-remove-block-loader',
-                            options:{
-                                active:isPro
-                            }
-                        }
-                    ]
-                },
-                {
-                    test:/\.sass$/,
-                    exclude: /(node_modules|bower_components)/,
-                    include:absolute("./src"),
-                    use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
-                            loader:"style-loader"
-                        },
-                        {
-                            loader:"css-loader"
-                        },
-                        {
-                            loader: 'postcss-loader', 
-                            options: { 
-                                config:{
-                                    path:resolve("/postcss.config.js")
-                                }
-                            }
-                        },
-                        {
-                            loader:"sass-loader"
-                        }
-                    ]
+                    include:configUtil.pathPwd("./src"),
+                    use:configUtil.getBabelLoader()
                 },
                 {
                     test:/\.less$/,
                     exclude: /(node_modules|bower_components|\.normal.less)/,
-                    include:absolute("./src"),
-                    use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
-                            loader:"style-loader"
-                        },
-                        {
-                            loader:"css-loader",
-                            options:{
-                                modules:true,
-                                localIdentName:"[hash:base64:5]",
-                                sourceMap:true
-                            }
-                        },
-                        {
-                            loader:"resolve-url-loader",
-                            options:{
-                                sourceMap:true
-                            }
-                        },
-                        {
-                            loader: 'postcss-loader', 
-                            options: { 
-                                sourceMap:true,
-                                config:{
-                                    path:resolve("/postcss.config.js")
-                                }
-                            }
-                        },
-                        {
-                            loader:"less-loader",
-                            options:{
-                                sourceMap:true
-                            }
-                        }
-                    ]
+                    include:configUtil.pathPwd("./src"),
+                    use:configUtil.getCssLoader(".less",{isPro,useModule:true})
                 },
                 {
                     test:/\.normal\.less$/,
                     exclude: /(node_modules|bower_components)/,
-                    include:absolute("./src"),
-                    use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
-                            loader:"style-loader"
-                        },
-                        {
-                            loader:"css-loader",
-                        },
-                        {
-                            loader:"less-loader"
-                        }
-                    ]
+                    include:configUtil.pathPwd("./src"),
+                    use:configUtil.getCssLoader(".normal.less",{isPro})
                 },
                 {
                     test:/\.css$/,
-                    use:[
-                        isPro ? {loader:MinicssExtractPlugin.loader,options:{publicPath:"./"}}:{
-                            loader:"style-loader"
-                        },
-                        {
-                            loader:"css-loader"
-                        },
-                        {
-                            loader: 'postcss-loader', 
-                            options: { 
-                                config:{
-                                    path:path.join(__dirname,"/postcss.config.js")
-                                }
-                            }
-                        }
-                    ]
+                    use:configUtil.getCssLoader(".css",{isPro})
                 },
                 {
                     test:/\.(jpg|png|gif)$/,
@@ -302,28 +72,13 @@ module.exports = function(option = {}){
                 }
             ]
         },
-        plugins:[
-            ...getPlugins(isHot,filenameFormat,isPro)
-        ],
+        plugins:configUtil.getPlugins(option),
         optimization: {
             splitChunks: {
-                cacheGroups: getCacheGroups()
+                cacheGroups: configUtil.getCacheGroups()
             }
         },
         cache:true
     }
-    if(useAnalyzer){
-        config.plugins.push(analyzer);
-    }
-    if(useTinypng){
-        config.plugins.push(tinypng);
-    }
-    if(usePwa){
-        config.plugins.push(new WorkboxPlugin.GenerateSW({
-            clientsClaim:true,
-            skipWaiting:true,
-            swDest:"../service-worker.js"
-        }))
-    }
-    return config;
+    return smp.wrap(config);
 }

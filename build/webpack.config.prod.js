@@ -2,15 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-const cleanWebpackPlugin = new CleanWebpackPlugin(
-  ['dist'],{
-      root:__dirname,
-      verbose:  true,
-      dry:false
-  }
-);
 
 
 const definePlugin = new webpack.DefinePlugin({
@@ -37,6 +28,6 @@ const config = baseConfig({
   usePwa:true
 });
 //prod  压缩
-config.plugins.push(uglifyPlugin,cleanWebpackPlugin,definePlugin,HashedModuleIdsPlugin);
+config.plugins.push(uglifyPlugin,definePlugin,HashedModuleIdsPlugin);
 
 module.exports = config;
