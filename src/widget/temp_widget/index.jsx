@@ -1,10 +1,11 @@
 import React,{Component} from 'react';
-import './index.less';
+import PropTypes from 'prop-types';
+import style from './index.less';
 
 
 
 
-export default class Comp extends Component{
+export default class $widgetName extends Component{
 	constructor(props) {
 		super(props);
 		this.state={
@@ -12,9 +13,11 @@ export default class Comp extends Component{
 	}
 	render(){
 		return (
-			<div className={['$widgetName'].join(' ')} >
-				widget templete 113
+			<div className={style.widget} >
             </div>
 		);
 	}
-} 
+}
+$widgetName.propTypes = {
+	
+}

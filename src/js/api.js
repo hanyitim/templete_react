@@ -32,13 +32,6 @@ function requireFactory(requireOption){
     };
 }
 
-/**
- * 输入主播波段号发起假如座席
- * data :{
- * 	band
- * 	terminalType  
- * }
- */
 export const apiTest = requireFactory({
     url:`${HOST}/test`,
     method:'get'
