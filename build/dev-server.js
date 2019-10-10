@@ -5,6 +5,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require("path");
 const fs = require("fs");
 const inquirer = require('inquirer');
+const open = require('open');
 
 
 const app = express();
@@ -20,7 +21,13 @@ const definePlugin = new webpack.DefinePlugin({
     MOCK:JSON.stringify('1')
 });
 const config = baseConfig({
-    isHot:true
+    isHot:true,
+    output:{
+      publicPath:projectConfig.pathname
+    },
+    defineOption:{
+      isDev:true
+    },
 });
 config.plugins.push(definePlugin);
 //mock
@@ -45,6 +52,8 @@ if(projectConfig.mock.isuse){
 function listen(port){
   app.listen(port,()=>{
     console.log(`Example app listening on port ${port}!\n`);
+    console.log(path.join(`http://localhost:${port}`,projectConfig.pathname));
+    open(path.join(`http://localhost:${port}`,projectConfig.pathname));
     toBuild();
   })
   .on('error',(err)=>{

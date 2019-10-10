@@ -1,22 +1,10 @@
 const path = require('path');
-const fs = require('fs');
 const baseConfig = require('./webpack.config.base');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const configUtil = require('./configUtil.js');
      
-function resolve(dir){
-  return path.join(__dirname,dir);
-}
-
-var cleanWebpackPlugin = new CleanWebpackPlugin(
-    ['dist'],{
-        root:__dirname,
-        verbose:  true,
-        dry:false
-    }
-);
 const config = baseConfig({
   output:{
-    path:resolve('dist/static'),
+    path:configUtil.pathPwd('dist/static'),
     publicPath:"./static/"
   },
   filenameFormat:"../$name.html",

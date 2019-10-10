@@ -148,7 +148,7 @@ function getHtmlPlugins(filenameFormat = false){
 }
 function getOutput(option = {}){
     var defaultOpt = {
-        path:pathDirname("dist"),
+        path:pathPwd("dist"),
         filename:"[name].js",
         publicPath:"/",
         chunkFilename:"[name].chunk.js"
@@ -162,7 +162,7 @@ function getCacheGroups(){
         test: /[\\/]node_modules[\\/]/,
         name:'vendor',
         chunks:'all',
-        minChunks:2
+        minChunks:pageList.length > 1 && !isSPA ? 2 : 1
     }
     return cacheGroups;
 }

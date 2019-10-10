@@ -1,13 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const configUtil = require('./configUtil.js');
 
 
 const definePlugin = new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify("production"),
 });
-const uglifyPlugin = new UglifyJsPlugin();
 const HashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
 
 
@@ -15,7 +14,7 @@ const HashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
 
 const config = baseConfig({
   output:{
-    path:path.join(__dirname,'dist/static'),
+    path:configUtil.pathPwd('dist/static'),
     publicPath:"./static/",
     filename:"[name]_[contenthash].js"
   },
@@ -28,6 +27,6 @@ const config = baseConfig({
   usePwa:true
 });
 //prod  压缩
-config.plugins.push(uglifyPlugin,definePlugin,HashedModuleIdsPlugin);
+config.plugins.push(definePlugin,HashedModuleIdsPlugin);
 
 module.exports = config;
