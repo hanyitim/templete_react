@@ -70,12 +70,12 @@ function getCssLoader(suffix=".css",options={}){
     }
     loaders.push({
         loader: 'postcss-loader', 
-        options: {
-            sourceMap:useModule ?true : false,
+        options: useModule ? {
+            sourceMap:true,
             config:{
                 path:pathPwd()
             }
-        }
+        }:{}
     })
     switch(suffix){
         case ".less":
