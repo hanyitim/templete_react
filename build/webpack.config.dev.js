@@ -11,5 +11,4 @@ const config = baseConfig({
   mode:"development"
 });
 
-config.plugins.push(cleanWebpackPlugin);
 module.exports = config;

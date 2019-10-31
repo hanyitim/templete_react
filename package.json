@@ -1,14 +1,17 @@
 {
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack -wd --config ./build/webpack.config.dev.js",
-    "build": "cross-env NODE_ENV=production rm -rf ./build/dist &&  webpack --config ./build/webpack.config.prod.js",
+    "build": "cross-env NODE_ENV=production rm -rf ./dist &&  webpack --config ./build/webpack.config.prod.js",
     "start": "node ./build/dev-server.js",
     "tree": "tree -L 4 -I 'node_modules' > readme.txt",
     "analyz": "npm_config_report=true npm run build",
     "cdn": "node ./build/cdn.js",
     "porter": "./build/porter.sh dist"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css",
+    "*.normal.less"
+  ],
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
@@ -49,6 +52,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "axios-mock-adapter": "^1.17.0",
+    "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
     "qs": "^6.7.0",
     "react": "^16.9.0",
