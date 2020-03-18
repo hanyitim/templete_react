@@ -18,7 +18,7 @@ const mockDir = path.join(process_cwd,projectConfig.mock.path),
 
 
 const definePlugin = new webpack.DefinePlugin({
-    MOCK:JSON.stringify('1')
+    NODE_ENV:JSON.stringify('dev')
 });
 const config = baseConfig({
     isHot:true,

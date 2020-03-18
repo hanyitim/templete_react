@@ -1,12 +1,13 @@
-const path = require('path');
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 const configUtil = require('./configUtil.js');
 
 
-const definePlugin = new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify("production"),
-});
+const definePlugin = (NODE_ENV)=>{
+  return new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+  });
+}
 const HashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
 
 
@@ -26,7 +27,9 @@ const config = baseConfig({
   isPro:true,
   usePwa:true
 });
-//prod  压缩
-config.plugins.push(definePlugin,HashedModuleIdsPlugin);
-
-module.exports = config;
+module.exports = (env)=>{
+  config.plugins.push(
+    definePlugin(env.NODE_ENV),
+    HashedModuleIdsPlugin
+  )
+}

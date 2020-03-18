@@ -1,4 +1,4 @@
-const path = require('path');
+const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 const configUtil = require('./configUtil.js');
      
@@ -10,5 +10,8 @@ const config = baseConfig({
   filenameFormat:"../$name.html",
   mode:"development"
 });
+config.plugins.unshift(new webpack.DefinePlugin({
+  NODE_ENV:JSON.stringify('dev')
+}));
 
 module.exports = config;

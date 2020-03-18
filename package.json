@@ -1,7 +1,9 @@
 {
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack -wd --config ./build/webpack.config.dev.js",
-    "build": "cross-env NODE_ENV=production rm -rf ./dist &&  webpack --config ./build/webpack.config.prod.js",
+    "build:dev": "rm -rf ./dist &&  webpack --env.NODE_ENV=dev --config ./build/webpack.config.prod.js",
+    "build:pre": "rm -rf ./dist &&  webpack --env.NODE_ENV=pre --config ./build/webpack.config.prod.js",
+    "build:prod": "rm -rf ./dist &&  webpack --env.NODE_ENV=product --config ./build/webpack.config.prod.js",
     "start": "node ./build/dev-server.js",
     "tree": "tree -L 4 -I 'node_modules' > readme.txt",
     "analyz": "npm_config_report=true npm run build",
