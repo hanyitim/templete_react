@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require("path");
-const fs = require("fs");
 const inquirer = require('inquirer');
 const open = require('open');
 
@@ -12,9 +11,6 @@ const app = express();
 const baseConfig = require('./webpack.config.base.js');
 const projectConfig = require('./project.config.js');
 
-const process_cwd = process.cwd();
-const mockDir = path.join(process_cwd,projectConfig.mock.path),
-      mockFileList = fs.readdirSync(mockDir);
 
 
 const definePlugin = new webpack.DefinePlugin({
@@ -30,23 +26,6 @@ const config = baseConfig({
     },
 });
 config.plugins.push(definePlugin);
-//mock
-if(projectConfig.mock.isuse){
-  mockFileList.map((item) =>{
-    if(/^[a-zA-Z][\w-]+\.json$/gi.test(item)){
-      item = item.replace(/\.\w*?$/gi,'');
-      let route = item.replace(/\-/gi,'/');
-          
-      app.use(`/${route}`,(req,res)=>{
-        let data = fs.readFileSync(path.join(mockDir,`./${item}.json`),'utf8');
-        res.set({
-          'Content-Type': 'application/json'
-        });
-        res.send(data);
-      })
-    }
-  })
-}
 
 //监听端口
 function listen(port){

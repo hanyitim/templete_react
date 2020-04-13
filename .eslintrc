@@ -23,6 +23,7 @@
             "always"
         ],
         "no-console": 0,
+        "no-debugger":"off",
         "template-curly-spacing" : "off",
         "indent" : "off"
     },

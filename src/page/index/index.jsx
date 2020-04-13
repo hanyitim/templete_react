@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import 'normalize.css';
 import style from './index.less';
 
 
