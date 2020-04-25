@@ -17,12 +17,7 @@ module.exports = function(option = {}){
         mode: mode || 'none',
         resolve:{
             alias:{
-                "@page":configUtil.pathPwd("./src/page/"),
-                "@widget":configUtil.pathPwd("./src/widget/"),
-                "@css":configUtil.pathPwd("./src/css/"),
-                "@js":configUtil.pathPwd("./src/js/"),
-                "@mobx":configUtil.pathPwd("./src/mobx/"),
-                "@src":configUtil.pathPwd("./src/")
+                "@":configUtil.pathPwd("./src/")
             },
             modules:[configUtil.pathPwd('./node_modules')]
         },

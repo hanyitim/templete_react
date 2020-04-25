@@ -1,12 +1,11 @@
 const webpack = require('webpack');
 const baseConfig = require('./webpack.config.base');
 const configUtil = require('./configUtil.js');
+const envConfig = require('./envConfig.js');
 
 
-const definePlugin = (NODE_ENV)=>{
-  return new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-  });
+const definePlugin = (option = {})=>{
+  return new webpack.DefinePlugin(configUtil.formatDefine(option));
 }
 const HashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
 
@@ -23,13 +22,15 @@ const config = baseConfig({
   mode:"production",
   devtool:"source-map",
   useAnalyzer:false,
-  useTinypng:true,
+  useTinypng:false,
   isPro:true,
-  usePwa:true
+  usePwa:false
 });
 module.exports = (env)=>{
-  config.plugins.push(
-    definePlugin(env.NODE_ENV),
+  config.plugins.unshift(
+    definePlugin(envConfig[env.NODE_ENV] || {}),
     HashedModuleIdsPlugin
-  )
+  );
+  console.log(env.NODE_ENV,definePlugin(envConfig[env.NODE_ENV] || {}));
+  return config;
 }

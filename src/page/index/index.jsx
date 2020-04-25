@@ -25,7 +25,8 @@ class App extends Component {
 	render() {
 		return (
 			<div className={style.page}>
-				page
+				page2
+				<div className={style.image}></div>
 			</div>
 		);
 	}
