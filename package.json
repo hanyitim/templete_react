@@ -12,6 +12,7 @@
   },
   "sideEffects": [
     "*.css",
+    "*.normal.scss",
     "*.normal.less"
   ],
   "devDependencies": {
