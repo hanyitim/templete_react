@@ -5,6 +5,8 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require("path");
 const inquirer = require('inquirer');
 const open = require('open');
+const configUtil = require('./configUtil.js');
+const envConfig = require('./envConfig.js');
 
 
 const app = express();
@@ -13,19 +15,17 @@ const projectConfig = require('./project.config.js');
 
 
 
-const definePlugin = new webpack.DefinePlugin({
-    NODE_ENV:JSON.stringify('dev')
-});
+console.log(envConfig,envConfig['dev'],configUtil.formatDefine(envConfig['dev']));
+const definePlugin = new webpack.DefinePlugin(configUtil.formatDefine(envConfig['dev']));
+console.log(definePlugin);
 const config = baseConfig({
     isHot:true,
     output:{
       publicPath:projectConfig.pathname
-    },
-    defineOption:{
-      isDev:true
-    },
+    }
 });
 config.plugins.push(definePlugin);
+console.log(config.plugins)
 
 //监听端口
 function listen(port){
