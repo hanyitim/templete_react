@@ -222,7 +222,13 @@ function getPlugins(option=[]){
     }
     return plugins;
 }
-
+function formatDefine(opt={}){
+    let define = {};
+    for(let key in opt){
+        define[`${key}`] = JSON.stringify(opt[key]);
+    }
+    return define;
+}
 module.exports = {
     pathPwd,
     pathDirname,
@@ -231,5 +237,6 @@ module.exports = {
     getBabelLoader,
     getOutput,
     getEntry,
-    getCacheGroups
+    getCacheGroups,
+    formatDefine
 }
