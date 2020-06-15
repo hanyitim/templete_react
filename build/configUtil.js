@@ -198,7 +198,8 @@ function getPlugins(option=[]){
     } = option,
         plugins = [];
     if(isHot){
-        plugins.push(new webpack.HotModuleReplacementPlugin())
+        console.log(new webpack.HotModuleReplacementPlugin());
+        plugins.push(new webpack.HotModuleReplacementPlugin());
     }
     plugins = plugins.concat(getHtmlPlugins(filenameFormat));
     if(isPro){

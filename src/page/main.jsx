@@ -1,9 +1,16 @@
 import React,{Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import {
+    HashRouter as Router,
+    Route,
+    Switch,
+    Redirect,
+} from 'react-router-dom';
+import style from './page.less';
 
 //page
-import LiveEntry from '@page/LiveEntry/index.jsx';
+import Index from '@/page/index/index.jsx';
 
 // if ('serviceWorker' in navigator) {
 //     window.addEventListener('load', () => {
@@ -27,7 +34,7 @@ class Pages extends Component{
             {match} = props;
         return (
             <div className={style.page}>
-                <Route path={`${match.url}/Permission`} render={ props => <Permission {...props} /> } />
+                <Route path={`${match.url}/index`} render={ props => <Index {...props} /> } />
             </div>
         );
     }
@@ -59,7 +66,7 @@ const render = () =>{
 };
 
 if(module.hot){
-    module.hot.accept('@page/main.jsx',function(){
+    module.hot.accept('@/page/main.jsx',function(){
         render();
     });
 }

@@ -15,9 +15,7 @@ const projectConfig = require('./project.config.js');
 
 
 
-console.log(envConfig,envConfig['dev'],configUtil.formatDefine(envConfig['dev']));
 const definePlugin = new webpack.DefinePlugin(configUtil.formatDefine(envConfig['dev']));
-console.log(definePlugin);
 const config = baseConfig({
     isHot:true,
     output:{
@@ -25,7 +23,6 @@ const config = baseConfig({
     }
 });
 config.plugins.push(definePlugin);
-console.log(config.plugins)
 
 //监听端口
 function listen(port){
@@ -54,6 +51,7 @@ function listen(port){
 function toBuild(){
   const compiler = webpack(config);
   app.use(webpackDevMiddleware(compiler, {
+    noInfo:true,
     publicPath: config.output.publicPath
   }));
   app.use(webpackHotMiddleware(compiler, {
