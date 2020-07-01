@@ -1,11 +1,10 @@
 import React,{Component} from 'react';
-import PropTypes from 'prop-types';
 import style from './index.less';
 
 
 
 
-export default class $widgetName extends Component{
+export default class Text extends Component{
 	constructor(props) {
 		super(props);
 		this.state={
@@ -14,10 +13,8 @@ export default class $widgetName extends Component{
 	render(){
 		return (
 			<div className={style.widget} >
+				asdfasdasdasf
             </div>
 		);
 	}
-}
-$widgetName.propTypes = {
-	
 }
