@@ -10,7 +10,8 @@ import {
 import style from './page.less';
 
 //page
-import Index from '@/page/index/index.jsx';
+import Index from '@/page/index/index.tsx';
+
 
 // if ('serviceWorker' in navigator) {
 //     window.addEventListener('load', () => {
@@ -30,7 +31,7 @@ class Pages extends Component{
         };
     }
     render(){
-        let {props} = this,
+        const {props} = this,
             {match} = props;
         return (
             <div className={style.page}>
@@ -66,7 +67,7 @@ const render = () =>{
 };
 
 if(module.hot){
-    module.hot.accept('@/page/main.jsx',function(){
+    module.hot.accept('@/page/main.tsx',function(){
         render();
     });
 }

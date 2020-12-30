@@ -12,6 +12,7 @@ const path = require('path'),
       tinyPngWebpackPlugin = require('tinypng-webpack-plugin'),
       BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
       OpimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'),
+      ESLintWebpackPlugin = require('eslint-webpack-plugin'),
       MinicssExtractPlugin = require('mini-css-extract-plugin');
 
 //分析文件体积，直接push 到 plugins 里面去
@@ -102,13 +103,13 @@ function getBabelLoader(){
             cacheDirectory:true
         }
     },
-    {
-        loader:"eslint-loader",
-        options:{
-            cache:true,
-            failOnError: true
-        }
-    }
+    // {
+    //     loader:"eslint-loader",
+    //     options:{
+    //         cache:true,
+    //         failOnError: true
+    //     }
+    // }
     );
     return loaders;
 }
@@ -172,14 +173,14 @@ function getEntry(isHot=false){
     var entry = {};
     if(isSPA){
          //main entry
-        entry["main"] = [path.join(pageDir,"main.jsx")];
+        entry["main"] = [path.join(pageDir,"main.tsx")];
         isHot && entry["main"].unshift(hotMiddlewareScript);
     }else{
         //page entry
         pageList.forEach((item) =>{
             if(/^[\w\_]+$/gi.test(item) && /^normal([\w\-]+)$/gi.test(item) !== true){
                 //根据page目录设置多页入口
-                entry[item] = [path.join(pageDir,item,"index.jsx")];
+                entry[item] = [path.join(pageDir,item,"index.tsx")];
                 isHot && entry[item].unshift(hotMiddlewareScript);
             }
         })
@@ -196,7 +197,13 @@ function getPlugins(option=[]){
         filenameFormat,
         isPro
     } = option,
-        plugins = [];
+        plugins = [
+            new ESLintWebpackPlugin({
+                cache:true,
+                extensions:['.js','.tsx','.ts'],
+                emitError:true
+            })
+        ];
     if(isHot){
         console.log(new webpack.HotModuleReplacementPlugin());
         plugins.push(new webpack.HotModuleReplacementPlugin());

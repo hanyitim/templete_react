@@ -1,6 +1,7 @@
-{
-    "parser": "babel-eslint",
+module.exports = {
+    "parser": "@typescript-eslint/parser",
     "plugins": [
+        "@typescript-eslint",
         "react"
     ],
     "env": {
@@ -27,5 +28,8 @@
         "template-curly-spacing" : "off",
         "indent" : "off"
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"]
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ]
 }

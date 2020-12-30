@@ -19,7 +19,8 @@ module.exports = function(option = {}){
             alias:{
                 "@":configUtil.pathPwd("./src/")
             },
-            modules:[configUtil.pathPwd('./node_modules')]
+            modules:[configUtil.pathPwd('./node_modules')],
+            extensions:['.js','.tsx','.ts']
         },
         devtool: devtool || 'inline-source-map',
         watchOptions:{
@@ -30,10 +31,15 @@ module.exports = function(option = {}){
         module:{
             rules:[
                 {
-                    test:/\.(jsx|js)$/,
+                    test:/\.(tsx?|js)$/,
                     exclude: /(node_modules|bower_components)/,
                     include:configUtil.pathPwd("./src"),
-                    use:configUtil.getBabelLoader()
+                    use:{
+                        loader:"babel-loader",
+                        options:{
+                            cacheDirectory:true
+                        }
+                    }
                 },
                 {
                     test:/\.less$/,

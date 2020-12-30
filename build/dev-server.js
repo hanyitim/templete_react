@@ -29,7 +29,7 @@ function listen(port){
   app.listen(port,()=>{
     console.log(`Example app listening on port ${port}!\n`);
     console.log(path.join(`http://localhost:${port}`,projectConfig.pathname));
-    open(path.join(`http://localhost:${port}`,projectConfig.pathname));
+    // open(path.join(`http://localhost:${port}`,projectConfig.pathname));
     toBuild();
   })
   .on('error',(err)=>{
