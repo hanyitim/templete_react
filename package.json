@@ -29,7 +29,7 @@
     "eslint-plugin-react": "^7.14.3",
     "express": "^4.17.1",
     "file-loader": "^4.2.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "inquirer": "^6.5.1",
     "jsfunc": "^0.1.0",
     "less": "^3.9.0",
